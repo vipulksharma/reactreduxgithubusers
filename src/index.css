@@ -1,0 +1,119 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.userListHeading {
+  margin: 0 auto;
+  background: #012b72;
+  text-align: center;
+  color: #fff;
+  padding: 15px 0;
+}
+.userListing {
+  background: #f3f3f3;
+  padding: 10px;
+}
+.odd {
+  background: #f3f7f8;
+}
+.userListing img {
+  height : 100px;
+}
+.userListing div {
+  text-transform: capitalize;
+  display: inline-block;
+  position: absolute;
+  margin: 38px 10px;
+}
+.userListing button{
+  float: right;
+  margin: 23px;
+}
+.btn {
+  cursor : pointer;
+  background-color: #00b9f5;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.loadMore {
+  position: absolute;
+  left: 45%;
+  margin: 10px 0;
+}
+
+.userDetails {
+  list-style: none;
+  display: -webkit-box;
+}
+.userDetails li {
+  width:20%;
+}
+.userListHeading.userDetails {
+  border: solid 1px ;
+}
+/*Loader css*/
+.loader {
+  left: 50%;
+  top: 50%;
+  position: fixed;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); }
+.loader #spinner {
+  box-sizing: border-box;
+  stroke: #673AB7;
+  stroke-width: 3px;
+  -webkit-transform-origin: 50%;
+  transform-origin: 50%;
+  -webkit-animation: line 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite, rotate 1.6s linear infinite;
+  animation: line 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite, rotate 1.6s linear infinite; }
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0);
+    transform: rotate(0); }
+  to {
+    -webkit-transform: rotate(450deg);
+    transform: rotate(450deg); } }
+
+@keyframes rotate {
+  from {
+    -webkit-transform: rotate(0);
+    transform: rotate(0); }
+  to {
+    -webkit-transform: rotate(450deg);
+    transform: rotate(450deg); } }
+
+@-webkit-keyframes line {
+  0% {
+    stroke-dasharray: 2, 85.964;
+    -webkit-transform: rotate(0);
+    transform: rotate(0); }
+  50% {
+    stroke-dasharray: 65.973, 21.9911;
+    stroke-dashoffset: 0; }
+  100% {
+    stroke-dasharray: 2, 85.964;
+    stroke-dashoffset: -65.973;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg); } }
+
+@keyframes line {
+  0% {
+    stroke-dasharray: 2, 85.964;
+    -webkit-transform: rotate(0);
+    transform: rotate(0); }
+  50% {
+    stroke-dasharray: 65.973, 21.9911;
+    stroke-dashoffset: 0; }
+  100% {
+    stroke-dasharray: 2, 85.964;
+    stroke-dashoffset: -65.973;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg); } }
