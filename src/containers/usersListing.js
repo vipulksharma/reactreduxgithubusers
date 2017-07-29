@@ -42,6 +42,7 @@ class UsersListing extends Component {
             </div>
         )
     }
+
 }
 export default withRouter(connect(state => {
         const users = state.user || {};
