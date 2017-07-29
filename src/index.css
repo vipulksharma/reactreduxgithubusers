@@ -59,6 +59,10 @@ body {
 .userListHeading.userDetails {
   border: solid 1px ;
 }
+
+.userDetails li img {
+  width: 200px;
+}
 /*Loader css*/
 .loader {
   left: 50%;

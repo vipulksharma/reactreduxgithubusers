@@ -17,21 +17,11 @@ class UsersListing extends Component {
         this.props.getUsersList(this.props.users.start);
     }
 
-    goToDetails = (id) => {
-        //window.location.href = '/' + id;
-
+    goToDetails(id) {
+        this.props.history.push(id);
     }
     render(){
         const {users}  = this.props.users;
-        //const Button = withRouter(({ history}) => (
-        //    <button
-        //        type='button'
-        //        className="btn"
-        //        onClick={(val) => { history.push(val.login) }}
-        //        >
-        //        Click Me!
-        //    </button>
-        //))
         return (<div>
                 <h1 className={"userListHeading"}>
                     Github Users List
@@ -42,7 +32,7 @@ class UsersListing extends Component {
                             <img src={val.avatar_url} alt={val.avatar_url}></img>
 
                             <div>{val.login}</div>
-                            <button className={"btn"} onClick={this.goToDetails(val.login)}>Details</button>
+                            <button className={"btn"} onClick={() => this.goToDetails(val.login)}>Details</button>
                         </div>)
                     })
                 }
@@ -53,11 +43,11 @@ class UsersListing extends Component {
         )
     }
 }
-export default connect(state => {
-    const users = state.user || {};
-    return {
-        users
-    }
+export default withRouter(connect(state => {
+        const users = state.user || {};
+return {
+    users
+}
 },{
     getUsersList
-})(UsersListing);
+})(UsersListing));

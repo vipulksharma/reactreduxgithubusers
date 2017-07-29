@@ -28,6 +28,20 @@ export const getUsersList = (start = 0) => {
 
 export const getUserData = (userId='') => {
     return async(dispatch, getState) => {
+        let currentState = getState();
+        const {users} = currentState.user;
+        if(users && users.length) {
+            var found = false;
+            for(var i = 0; i < users.length; i++) {
+                if (users[i].login === userId) {
+                    dispatch({
+                        type: 'INDIVIDUAL_USER_DATA_RECIEVED',
+                        "userData" : users[i]
+                    })
+                    return;
+                }
+            }
+        }
         fetch('https://api.github.com/users/' + userId, {
             method: 'GET'
         }).then((response) => response.json())
