@@ -6,45 +6,72 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { getUserData } from '../actions'
-
+import { setTODOS } from '../actions'
+//Component Create
+//Component Update
+// Destroy
 class UsersDetails extends Component {
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            error : '',
+            currentTODO : ''
+        };
+    }
     componentDidMount() {
         // Call github api to fetch user list.
-        const {location } = window;
-        let path = location.pathname.split('/')[1];
-        this.props.getUserData(path);
+        this.props.setTODOS([]);
     }
-
+    addTODO = () => {
+        const {currentTODO} = this.state;
+        if(!currentTODO) {
+            this.setState({error: true})
+        } else {
+            let {todos} = this.props;
+            console.log(todos);
+            todos.todos.push(currentTODO);
+            // this.setState({"todos" : todos});
+            this.props.setTODOS(todos.todos);
+        }
+    }
+    todoValue = (event) => {
+        this.setState({currentTODO : event.target.value, error: false});
+    }
     render(){
-        const {userData} = this.props.user;
+        const { error, currentTODO } = this.state;
+        const {todos} = this.props;
+        console.log(todos);
         return (<div>
-                {
-                    userData && <ul className="userListHeading userDetails">
-                        <li>Id</li>
-                        <li>Avatar</li>
-                        <li>Login</li>
-                        <li>Html Url</li>
+            <div className="header">TODO List</div>
+            <div className="row">
+                <div className="col-3 menu">
+                    <input type="text"  placeholder="Please enter TODO" onChange={this.todoValue}></input>
+                    {
+                        error && <div className="red">Please enter TODO</div>
+                    }
+                    <button onClick={this.addTODO}>Click me</button>
+                </div>
+                <div ref="homeDisplay">
+                    <ul>
+                        {todos.todos && todos.todos.length > 0 && todos.todos.map((val, index) => {
+                            return (
+                                <div>{val}</div>
+                            )
+                        })}
                     </ul>
-                }
-                {
-                    userData && <ul className="userDetails">
-                        <li>{userData.id}</li>
-                        <li><img src={userData.avatar_url} alt={userData.avatar_url}/></li>
-                        <li>{userData.login}</li>
-                        <li>{userData.html_url}</li>
-                    </ul>
-                }
+                </div>
             </div>
+            <div className="footer">{localStorage.vipul}©Surya Pratap Badal : badal2206@gmail.com</div>
+        </div>
         )
     }
 }
 export default connect(state => {
-    const user = state.user || {};
+    const todos = state.user || [];
     return {
-        user
+        todos
     }
 },{
-    getUserData
+    setTODOS
 })(UsersDetails);
+

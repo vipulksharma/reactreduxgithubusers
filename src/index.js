@@ -22,7 +22,7 @@ ReactDOM.render(
         <BrowserRouter>
             <div>
                 <Route exact path='/' component={App} />
-                <Route path='/:userId' component={UserInfo} />
+    <Route path='/reactlearn/component' component={UserInfo} />
             </div>
         </BrowserRouter>
     </Provider>,

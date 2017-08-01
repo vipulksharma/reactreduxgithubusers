@@ -5,7 +5,7 @@
 
 
 const user = (state = {}, action) => {
-    const { type, users, start , userData} = action;
+    const { type, users, start , userData, payload, todos} = action;
 
     switch(type){
         case 'USER_DATA_RECIEVED':
@@ -13,6 +13,9 @@ const user = (state = {}, action) => {
         case 'INDIVIDUAL_USER_DATA_RECIEVED':
             console.log('in here', action);
             return {...state, "userData" : userData}
+        case 'SET_TODO': {
+            return {...state, "todos": todos}
+        }
         default:
             return state;
     }

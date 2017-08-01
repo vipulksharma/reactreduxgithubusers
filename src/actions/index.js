@@ -26,6 +26,14 @@ export const getUsersList = (start = 0) => {
 
 }
 
+export function setTODOS(todos){
+    console.log(todos);
+    return {
+        type: 'SET_TODO',
+        "todos":todos
+    }
+}
+
 export const getUserData = (userId='') => {
     return async(dispatch, getState) => {
         let currentState = getState();
