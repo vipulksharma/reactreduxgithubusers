@@ -36,7 +36,7 @@ class UsersDetails extends Component {
             //this.props.setTODOS(todos.todos);
         //}
     createData = () => {
-        let {employeeDetail,page} = this.state;
+        let {employeeDetail} = this.state;
         let formData = document.forms['myForm'];
         let date = formData.dob.value;
         let fName = formData.firstName.value;
@@ -58,16 +58,13 @@ class UsersDetails extends Component {
             'email': email,
             'post': post
         };
-
         employeeDetail.push(employee);
-        console.log(employeeDetail);
         this.setState({employeeDetail:employeeDetail});
-        console.log(employeeDetail);
+        let {page} = this.state;
         this.setState({page:'home'});
     }
     changeData = (event) => {
-        let {currentInput, error} =this.state;
-        console.log(currentInput);
+        let {currentInput, error} = this.state;
         this.setState({currentInput : event.target.value});
         if(!currentInput) {this.setState({error:true})}
         else {this.setState({error:false});}
@@ -95,7 +92,7 @@ class UsersDetails extends Component {
                     </div>
                     <div  className="col-6">
                         <div className="head"><h2>New Employee Registration Form:</h2></div>
-                        <form name="myForm" className="formBack">
+                        <form name="myForm1" className="formBack">
                                     <pre>
                                     <p><b>First Name :</b><input type="text" onChange={this.changeData} name="firstName" max="10" autoFocus required/>
                                         {
@@ -184,7 +181,7 @@ class UsersDetails extends Component {
     }
     homePage = () => {
         const {employeeDetail} = this.state;
-        console.log(employeeDetail);
+        console.log(employeeDetail.length);
         return (
             <div>
                 <div className="header">Employee Enrolment</div>
@@ -195,25 +192,12 @@ class UsersDetails extends Component {
                             <button onClick={this.createNew}>Create New</button>
                         </ul></div>
                     <div>
-                        <table>
-                            <tr>
-                                <th></th>
-                                <th>emp-id</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>DOB</th>
-                                <th>E-mail</th>
-                                <th>Post</th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <td><button>Update</button></td>
-                                {employeeDetail && employeeDetail.length >= 0 && employeeDetail.map((val, index, i) => {
-                                        return(<td>{val}</td>)
-                                    })}
-                                <td><button>Delete</button></td>
-                            </tr>
-                        </table>
+                        {employeeDetail && employeeDetail.length>0 && employeeDetail.map((val, index) => {
+                            console.log(val);
+                            return(
+                                <div>{index}</div>
+                            )
+                        })}
                     </div>
                 </div>
                 <div className="footer">©Surya Pratap Badal : badal2206@gmail.com</div>
