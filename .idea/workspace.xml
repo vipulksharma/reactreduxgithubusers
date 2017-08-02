@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="35a7fbf3-3302-465b-a4ad-3c6336f0e1a2" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/containers/userDetails.js" afterPath="$PROJECT_DIR$/src/containers/userDetails.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="reactreduxgithubusers.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -113,7 +113,7 @@
       <file leaf-file-name="userDetails.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/containers/userDetails.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
+            <state relative-caret-position="319">
               <caret line="194" column="45" lean-forward="false" selection-start-line="194" selection-start-column="45" selection-end-line="194" selection-end-column="45" />
               <folding>
                 <element signature="e#104#145#0" expanded="true" />
@@ -391,12 +391,12 @@
       <updated>1501257763952</updated>
       <workItem from="1501432224842" duration="2696000" />
       <workItem from="1501533644663" duration="166000" />
-      <workItem from="1501610054527" duration="24354000" />
+      <workItem from="1501610054527" duration="24835000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27216000" />
+    <option name="totallyTimeSpent" value="27697000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="810" extended-state="0" />
@@ -710,7 +710,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/userDetails.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
+        <state relative-caret-position="319">
           <caret line="194" column="45" lean-forward="false" selection-start-line="194" selection-start-column="45" selection-end-line="194" selection-end-column="45" />
           <folding>
             <element signature="e#104#145#0" expanded="true" />
