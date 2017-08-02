@@ -14,56 +14,223 @@ class UsersDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            employeeDetail: [],
             error : '',
-            currentTODO : ''
+            page: 'home',
+            currentInput : ''
         };
     }
     componentDidMount() {
         // Call github api to fetch user list.
-        this.props.setTODOS([]);
+        //this.props.setTODOS([]);
     }
-    addTODO = () => {
-        const {currentTODO} = this.state;
-        if(!currentTODO) {
-            this.setState({error: true})
-        } else {
-            let {todos} = this.props;
-            console.log(todos);
-            todos.todos.push(currentTODO);
-            // this.setState({"todos" : todos});
-            this.props.setTODOS(todos.todos);
+   // addTODO = () => {
+     //   const {currentInput} = this.state;
+       // if(!currentInput) {
+         //   this.setState({error: true})
+        //} else {
+          //  let {todos} = this.state;
+           // console.log(todos);
+           // todos.push(currentInput);
+           // this.setState({"todos" : todos});
+            //this.props.setTODOS(todos.todos);
+        //}
+    createData = () => {
+        let {employeeDetail,page} = this.state;
+        let formData = document.forms['myForm'];
+        let date = formData.dob.value;
+        let fName = formData.firstName.value;
+        let lName = formData.lastName.value;
+        let email = formData.email.value;
+        let gender = formData.gender.value;
+        let post = formData.wField.value;
+        if (!fName || !lName || !date || !email) {
+            this.setState({error: true});
+            return;
         }
+        let eid = Math.floor(Math.random()*10000);
+        let employee = {
+            'emp-id': eid,
+            'firstName': fName,
+            'lastName': lName,
+            'gender': gender,
+            'dob': date,
+            'email': email,
+            'post': post
+        };
+
+        employeeDetail.push(employee);
+        console.log(employeeDetail);
+        this.setState({employeeDetail:employeeDetail});
+        console.log(employeeDetail);
+        this.setState({page:'home'});
     }
-    todoValue = (event) => {
-        this.setState({currentTODO : event.target.value, error: false});
+    changeData = (event) => {
+        let {currentInput, error} =this.state;
+        console.log(currentInput);
+        this.setState({currentInput : event.target.value});
+        if(!currentInput) {this.setState({error:true})}
+        else {this.setState({error:false});}
     }
-    render(){
-        const { error, currentTODO } = this.state;
-        const {todos} = this.props;
-        console.log(todos);
-        return (<div>
-            <div className="header">TODO List</div>
-            <div className="row">
-                <div className="col-3 menu">
-                    <input type="text"  placeholder="Please enter TODO" onChange={this.todoValue}></input>
-                    {
-                        error && <div className="red">Please enter TODO</div>
-                    }
-                    <button onClick={this.addTODO}>Click me</button>
+    createNew = () => {
+        const {page} = this.state;
+        this.setState({page: 'create'});
+    }
+    homeDisplay = () => {
+        const {page} = this.state;
+        this.setState({page: 'home'});
+    }
+    updatePage = () => {
+        const {error,currentInput} =this.state;
+        return (
+            <div>
+                <div className="header">
+                    <h1>Employee Enrolment</h1>
                 </div>
-                <div ref="homeDisplay">
-                    <ul>
-                        {todos.todos && todos.todos.length > 0 && todos.todos.map((val, index) => {
-                            return (
-                                <div>{val}</div>
-                            )
-                        })}
-                    </ul>
+                <div className="row">
+                    <div className="col-3 menu">
+                        <ul>
+                            <button onClick={this.homeDisplay}>Home</button>
+                        </ul>
+                    </div>
+                    <div  className="col-6">
+                        <div className="head"><h2>New Employee Registration Form:</h2></div>
+                        <form name="myForm" className="formBack">
+                                    <pre>
+                                    <p><b>First Name :</b><input type="text" onChange={this.changeData} name="firstName" max="10" autoFocus required/>
+                                        {
+                                            error && <span className="red">*Please enter this Field</span>
+                                        }</p>
+                                    <p><b>Last Name  :</b><input type="text" onChange={this.changeData} name="lastName" max="10" required/>
+                                        {
+                                            error && <span className="red">*Please enter this Field</span>
+                                        }</p>
+                                    <p><b>Gender     :</b><select name="gender">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    </select></p>
+                                    <p><b>DOB        :</b><input type="date" onChange={this.changeData} name="dob" max="1999-01-01" required/>
+                                        {
+                                            error && <span className="red">*Please enter this Field</span>
+                                        }</p>
+                                    <p><b>E-Mail     :</b><input type="email" onChange={this.changeData} name="email" required/>
+                                        {
+                                            error && <span className="red">*Please enter this Field</span>
+                                        }</p>
+                                    <p><b>Work-Field :</b></p>
+                                        <input type="radio" value="Worker" name="wField" checked/>Worker
+                                        <input type="radio" value="Engineer" name="wField"/>Engineer
+                                        <input type="radio" value="Manager" name="wField"/>Manager
+                                        <input type="radio" value="TeamLead" name="wField"/>Team Lead
+                                    <p><input type="submit" value="Submit" onClick={this.updateData}/></p>
+                                    </pre>
+                        </form>
+                    </div>
+                    <div className="footer col-12">©Surya Pratap Badal : badal2206@gmail.com</div>
                 </div>
             </div>
-            <div className="footer">{localStorage.vipul}©Surya Pratap Badal : badal2206@gmail.com</div>
-        </div>
         )
+    }
+    createPage = () => {
+        const {error,currentInput} =this.state;
+        return (
+            <div>
+                <div className="header">
+                    <h1>Employee Enrolment</h1>
+                </div>
+                <div className="row">
+                    <div className="col-3 menu">
+                        <ul>
+                            <button onClick={this.homeDisplay}>Home</button>
+                        </ul>
+                    </div>
+                    <div  className="col-6">
+                        <div className="head"><h2>New Employee Registration Form:</h2></div>
+                        <form name="myForm" className="formBack">
+                                    <pre>
+                                    <p><b>First Name :</b><input type="text" onChange={this.changeData} name="firstName" max="10" autoFocus required/>
+                                        {
+                                            error && <span className="red">*Please enter this Field</span>
+                                        }</p>
+                                    <p><b>Last Name  :</b><input type="text" onChange={this.changeData} name="lastName" max="10" required/>
+                                        {
+                                            error && <span className="red">*Please enter this Field</span>
+                                        }</p>
+                                    <p><b>Gender     :</b><select name="gender">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    </select></p>
+                                    <p><b>DOB        :</b><input type="date" onChange={this.changeData} name="dob" max="1999-01-01" required/>
+                                        {
+                                            error && <span className="red">*Please enter this Field</span>
+                                        }</p>
+                                    <p><b>E-Mail     :</b><input type="email" onChange={this.changeData} name="email" required/>
+                                        {
+                                            error && <span className="red">*Please enter this Field</span>
+                                        }</p>
+                                    <p><b>Work-Field :</b></p>
+                                        <input type="radio" value="Worker" name="wField" checked/>Worker
+                                        <input type="radio" value="Engineer" name="wField"/>Engineer
+                                        <input type="radio" value="Manager" name="wField"/>Manager
+                                        <input type="radio" value="TeamLead" name="wField"/>Team Lead
+                                    <p><input type="submit" value="Submit" onClick={this.createData}/> <input type="reset" value="Reset All"/></p>
+                                    </pre>
+                        </form>
+                    </div>
+                    <div className="footer col-12">©Surya Pratap Badal : badal2206@gmail.com</div>
+                </div>
+            </div>
+        )
+    }
+    homePage = () => {
+        const {employeeDetail} = this.state;
+        console.log(employeeDetail);
+        return (
+            <div>
+                <div className="header">Employee Enrolment</div>
+                <div className="row">
+                    <div className="col-3 menu">
+                        <ul>
+                            <button onClick={this.homeDisplay}>Home</button>
+                            <button onClick={this.createNew}>Create New</button>
+                        </ul></div>
+                    <div>
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>emp-id</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>DOB</th>
+                                <th>E-mail</th>
+                                <th>Post</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td><button>Update</button></td>
+                                {employeeDetail && employeeDetail.length >= 0 && employeeDetail.map((val, index, i) => {
+                                        return(<td>{val}</td>)
+                                    })}
+                                <td><button>Delete</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div className="footer">©Surya Pratap Badal : badal2206@gmail.com</div>
+            </div>
+        )
+    }
+    render(){
+        const {page} = this.state;
+        if(page == 'home'){
+            return this.homePage();
+        }
+        else if(page == 'create') {
+            return this.createPage();
+        }
+        else if (page == 'update') {
+            return this.updatePage();
+        }
     }
 }
 export default connect(state => {
