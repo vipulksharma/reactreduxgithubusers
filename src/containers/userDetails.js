@@ -191,15 +191,18 @@ class UsersDetails extends Component {
                             <button onClick={this.createNew}>Create New</button>
                         </ul></div>
                     <div>
+                        <table>
                         {employeeDetail && employeeDetail.length>0 && employeeDetail.map((val, index) => {
                             console.log(val);
-                            for(var i in val){
-                                console.log(val[i]);
-                                return(
-                                    <div>{val[i]}</div>
-                                )
-                            }
+                            return(<tr key={val["emp-id"]}>
+                                <td>{val["emp-id"]}</td>
+                                <td>{val.firstName}</td>
+<td>{val.lastName}</td>
+<td>{val.gender}</td>
+<td>{val.email}</td>
+                            </tr>)
                         })}
+                    </table>
                     </div>
                 </div>
                 <div className="footer">©Surya Pratap Badal : badal2206@gmail.com</div>
