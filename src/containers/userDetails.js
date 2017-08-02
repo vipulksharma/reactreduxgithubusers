@@ -181,7 +181,6 @@ class UsersDetails extends Component {
     }
     homePage = () => {
         const {employeeDetail} = this.state;
-        console.log(employeeDetail.length);
         return (
             <div>
                 <div className="header">Employee Enrolment</div>
@@ -194,9 +193,12 @@ class UsersDetails extends Component {
                     <div>
                         {employeeDetail && employeeDetail.length>0 && employeeDetail.map((val, index) => {
                             console.log(val);
-                            return(
-                                <div>{index}</div>
-                            )
+                            for(var i in val){
+                                console.log(val[i]);
+                                return(
+                                    <div>{val[i]}</div>
+                                )
+                            }
                         })}
                     </div>
                 </div>
