@@ -41,7 +41,6 @@ class UsersDetails extends Component {
         document.getElementById("dAlert").style.display = "none";
         document.getElementById("eAlert").style.display = "none";
         let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        let {employeeDetail} = this.state;
         let formData = document.forms['myForm'];
         let date = formData.dob.value;
         let fName = formData.firstName.value;
@@ -79,16 +78,50 @@ class UsersDetails extends Component {
         this.setState({currentId:id});
         this.setState({page:'update'});
     }
-    //updateData = () => {
-    //}
+    updateData = () => {
+        document.getElementById("fAlert1").style.display = "none";
+        document.getElementById("lAlert1").style.display = "none";
+        document.getElementById("dAlert1").style.display = "none";
+        document.getElementById("eAlert1").style.display = "none";
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let formData = document.forms['myForm1'];
+        let eid = formData.empId.value;
+        let date = formData.dob.value;
+        let fName = formData.firstName.value;
+        let lName = formData.lastName.value;
+        let email = formData.email.value;
+        let gender = formData.gender.value;
+        let post = formData.post.value;
+        if(!re.test(email)) {document.getElementById("eAlert1").style.display = "inline";return;}
+
+        let employee = {
+            'emp-id': eid,
+            'firstName': fName,
+            'lastName': lName,
+            'gender': gender,
+            'dob': date,
+            'email': email,
+            'post': post
+        };
+        let empData = JSON.parse(localStorage.getItem('employeeDetail'));
+        {empData && empData.length>0 && empData.map((val, index) => {
+            if(val['emp-id'] == eid) {
+                empData[index] = employee;
+                localStorage.setItem('employeeDetail',JSON.stringify(empData))
+            }
+        })}
+        //employeeDetail.push(employee);
+        //this.setState({employeeDetail:employeeDetail});
+        let {page} = this.state;
+        this.setState({page:'home'});
+    }
     deleteEmp (id){
         const {currentId,page} = this.state;
         this.setState({currentId:id});
-        let empData = JSON.parse(localStorage.getItem('employeeDetail'));
+        let newData,empData = JSON.parse(localStorage.getItem('employeeDetail'));
         {empData && empData.length>0 && empData.map((val, index) => {
             if(val['emp-id']== currentId) {
-                console.log(index);
-                empData = empData.splice(index,1);
+                newData = empData.splice(index,1);
                 localStorage.setItem('employeeDetail',JSON.stringify(empData));
                 //this.setState({employeeDetail:employeeDetail});
                 this.setState({page:'home'});
@@ -126,21 +159,21 @@ class UsersDetails extends Component {
                                 if (val['emp-id']== currentId){
                                     return(
                                         <pre>
-                                    <p><b>Employee Id:</b><input type="text" name="empId" max="10" value={val['emp-id']} autoFocus readOnly/>
+                                    <p><b>Employee Id:</b><input type="text" name="empId" max="10" value={val['emp-id']} readOnly/>
                                     </p>
-                                    <p><b>First Name :</b><input type="text" name="firstName" max="10" value={val['firstName']} autoFocus required/><span id="fAlert1" className="red" style={{display: 'none'}}>*Please enter First Name</span>
+                                    <p><b>First Name :</b><input type="text" name="firstName" max="10" defaultValue={val['firstName']} autoFocus/><span id="fAlert1" className="red" style={{display: 'none'}}>*Please enter First Name</span>
                                     </p>
-                                    <p><b>Last Name  :</b><input type="text" name="lastName" max="10" value={val['lastName']} required/><span id="lAlert1" className="red" style={{display: 'none'}}>*Please enter Last Name</span>
+                                    <p><b>Last Name  :</b><input type="text" name="lastName" max="10" defaultValue={val['lastName']}/><span id="lAlert1" className="red" style={{display: 'none'}}>*Please enter Last Name</span>
                                     </p>
                                     <p><b>Gender     :</b><select name="gender" value={val['gender']}>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                     </select></p>
-                                    <p><b>DOB        :</b><input type="date" name="dob" max="1999-01-01" value={val['dob']} required/><span id="dAlert1" className="red" style={{display: 'none'}}>*Please enter the DOB</span>
+                                    <p><b>DOB        :</b><input type="date" name="dob" max="1999-01-01" defaultValue={val['dob']}/><span id="dAlert1" className="red" style={{display: 'none'}}>*Please enter the DOB</span>
                                     </p>
-                                    <p><b>E-Mail     :</b><input type="email" name="email" value={val['email']} required/><span id="eAlert1" className="red" style={{display: 'none'}}>*Please enter the Email ID</span>
+                                    <p><b>E-Mail     :</b><input type="email" name="email" defaultValue={val['email']}/><span id="eAlert1" className="red" style={{display: 'none'}}>*Please enter the Email ID</span>
                                     </p>
-                                    <p><b>Work-Field     :</b><select name="post" value={val['post']}>
+                                    <p><b>Work-Field     :</b><select name="post" defaultValue={val['post']}>
                                     <option value="Engineer">Engineer</option>
                                     <option value="Manager">Manager</option>
                                     <option value="Worker">Worker</option>
@@ -203,7 +236,6 @@ class UsersDetails extends Component {
     homePage = () => {
         const {page} = this.state;
         const empData = JSON.parse(localStorage.getItem('employeeDetail'));
-        console.log(empData);
         return (
             <div>
                 <div className="header">Employee Enrolment</div>
