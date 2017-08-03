@@ -14,13 +14,13 @@ class UsersDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            employeeDetail: [],
-            error : '',
+            //employeeDetail: [],
+            currentId: '',
             page: 'home',
-            currentInput : ''
         };
     }
     componentDidMount() {
+    //    let {employeeDetail} = this.state;
         // Call github api to fetch user list.
         //this.props.setTODOS([]);
     }
@@ -36,6 +36,11 @@ class UsersDetails extends Component {
             //this.props.setTODOS(todos.todos);
         //}
     createData = () => {
+        document.getElementById("fAlert").style.display = "none";
+        document.getElementById("lAlert").style.display = "none";
+        document.getElementById("dAlert").style.display = "none";
+        document.getElementById("eAlert").style.display = "none";
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let {employeeDetail} = this.state;
         let formData = document.forms['myForm'];
         let date = formData.dob.value;
@@ -44,10 +49,13 @@ class UsersDetails extends Component {
         let email = formData.email.value;
         let gender = formData.gender.value;
         let post = formData.wField.value;
-        if (!fName || !lName || !date || !email) {
-            this.setState({error: true});
-            return;
+        if (date == "" || fName == "" || lName == "") {
+            if(fName == "") {document.getElementById("fAlert").style.display = "inline";return;}
+            if(lName == "") {document.getElementById("lAlert").style.display = "inline";return;}
+            if(date == "") {document.getElementById("dAlert").style.display = "inline";return;}
         }
+        else if(email == "" || !re.test(email)) {document.getElementById("eAlert").style.display = "inline";return;}
+
         let eid = Math.floor(Math.random()*10000);
         let employee = {
             'emp-id': eid,
@@ -58,16 +66,36 @@ class UsersDetails extends Component {
             'email': email,
             'post': post
         };
-        employeeDetail.push(employee);
-        this.setState({employeeDetail:employeeDetail});
+        let empData = JSON.parse(localStorage.getItem('employeeDetail')) || [];
+        empData.push(employee);
+        localStorage.setItem('employeeDetail',JSON.stringify(empData));
+        //employeeDetail.push(employee);
+        //this.setState({employeeDetail:employeeDetail});
         let {page} = this.state;
         this.setState({page:'home'});
     }
-    changeData = (event) => {
-        let {currentInput, error} = this.state;
-        this.setState({currentInput : event.target.value});
-        if(!currentInput) {this.setState({error:true})}
-        else {this.setState({error:false});}
+    updateEmp (id){
+        const {currentId,page} = this.state;
+        this.setState({currentId:id});
+        this.setState({page:'update'});
+    }
+    //updateData = () => {
+    //}
+    deleteEmp (id){
+        const {currentId,page} = this.state;
+        this.setState({currentId:id});
+        let empData = JSON.parse(localStorage.getItem('employeeDetail'));
+        {empData && empData.length>0 && empData.map((val, index) => {
+            if(val['emp-id']== currentId) {
+                console.log(index);
+                empData = empData.splice(index,1);
+                localStorage.setItem('employeeDetail',JSON.stringify(empData));
+                //this.setState({employeeDetail:employeeDetail});
+                this.setState({page:'home'});
+                return;
+            }
+        })}
+
     }
     createNew = () => {
         const {page} = this.state;
@@ -78,11 +106,12 @@ class UsersDetails extends Component {
         this.setState({page: 'home'});
     }
     updatePage = () => {
-        const {error,currentInput} =this.state;
+        const {currentId} = this.state;
+        let empData = JSON.parse(localStorage.getItem('employeeDetail'));
         return (
             <div>
                 <div className="header">
-                    <h1>Employee Enrolment</h1>
+                    <h1>Update employee</h1>
                 </div>
                 <div className="row">
                     <div className="col-3 menu">
@@ -93,34 +122,35 @@ class UsersDetails extends Component {
                     <div  className="col-6">
                         <div className="head"><h2>New Employee Registration Form:</h2></div>
                         <form name="myForm1" className="formBack">
-                                    <pre>
-                                    <p><b>First Name :</b><input type="text" onChange={this.changeData} name="firstName" max="10" autoFocus required/>
-                                        {
-                                            error && <span className="red">*Please enter this Field</span>
-                                        }</p>
-                                    <p><b>Last Name  :</b><input type="text" onChange={this.changeData} name="lastName" max="10" required/>
-                                        {
-                                            error && <span className="red">*Please enter this Field</span>
-                                        }</p>
-                                    <p><b>Gender     :</b><select name="gender">
+                            {empData && empData.length >0 && empData.map((val, index) =>{
+                                if (val['emp-id']== currentId){
+                                    return(
+                                        <pre>
+                                    <p><b>Employee Id:</b><input type="text" name="empId" max="10" value={val['emp-id']} autoFocus readOnly/>
+                                    </p>
+                                    <p><b>First Name :</b><input type="text" name="firstName" max="10" value={val['firstName']} autoFocus required/><span id="fAlert1" className="red" style={{display: 'none'}}>*Please enter First Name</span>
+                                    </p>
+                                    <p><b>Last Name  :</b><input type="text" name="lastName" max="10" value={val['lastName']} required/><span id="lAlert1" className="red" style={{display: 'none'}}>*Please enter Last Name</span>
+                                    </p>
+                                    <p><b>Gender     :</b><select name="gender" value={val['gender']}>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                     </select></p>
-                                    <p><b>DOB        :</b><input type="date" onChange={this.changeData} name="dob" max="1999-01-01" required/>
-                                        {
-                                            error && <span className="red">*Please enter this Field</span>
-                                        }</p>
-                                    <p><b>E-Mail     :</b><input type="email" onChange={this.changeData} name="email" required/>
-                                        {
-                                            error && <span className="red">*Please enter this Field</span>
-                                        }</p>
-                                    <p><b>Work-Field :</b></p>
-                                        <input type="radio" value="Worker" name="wField" checked/>Worker
-                                        <input type="radio" value="Engineer" name="wField"/>Engineer
-                                        <input type="radio" value="Manager" name="wField"/>Manager
-                                        <input type="radio" value="TeamLead" name="wField"/>Team Lead
+                                    <p><b>DOB        :</b><input type="date" name="dob" max="1999-01-01" value={val['dob']} required/><span id="dAlert1" className="red" style={{display: 'none'}}>*Please enter the DOB</span>
+                                    </p>
+                                    <p><b>E-Mail     :</b><input type="email" name="email" value={val['email']} required/><span id="eAlert1" className="red" style={{display: 'none'}}>*Please enter the Email ID</span>
+                                    </p>
+                                    <p><b>Work-Field     :</b><select name="post" value={val['post']}>
+                                    <option value="Engineer">Engineer</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Worker">Worker</option>
+                                    <option value="Team-lead">Team-Lead</option>
+                                    </select></p>
                                     <p><input type="submit" value="Submit" onClick={this.updateData}/></p>
-                                    </pre>
+                            </pre>
+                                    )
+                                }
+                            })}
                         </form>
                     </div>
                     <div className="footer col-12">©Surya Pratap Badal : badal2206@gmail.com</div>
@@ -129,7 +159,6 @@ class UsersDetails extends Component {
         )
     }
     createPage = () => {
-        const {error,currentInput} =this.state;
         return (
             <div>
                 <div className="header">
@@ -145,26 +174,18 @@ class UsersDetails extends Component {
                         <div className="head"><h2>New Employee Registration Form:</h2></div>
                         <form name="myForm" className="formBack">
                                     <pre>
-                                    <p><b>First Name :</b><input type="text" onChange={this.changeData} name="firstName" max="10" autoFocus required/>
-                                        {
-                                            error && <span className="red">*Please enter this Field</span>
-                                        }</p>
-                                    <p><b>Last Name  :</b><input type="text" onChange={this.changeData} name="lastName" max="10" required/>
-                                        {
-                                            error && <span className="red">*Please enter this Field</span>
-                                        }</p>
+                                    <p><b>First Name :</b><input type="text" name="firstName" max="10" autoFocus required/><span id="fAlert" className="red" style={{display:'none'}}>*Please enter First Name</span>
+                                    </p>
+                                    <p><b>Last Name  :</b><input type="text" name="lastName" max="10" required/><span id="lAlert" className="red" style={{display:'none'}}>*Please enter Last Name</span>
+                                    </p>
                                     <p><b>Gender     :</b><select name="gender">
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                     </select></p>
-                                    <p><b>DOB        :</b><input type="date" onChange={this.changeData} name="dob" max="1999-01-01" required/>
-                                        {
-                                            error && <span className="red">*Please enter this Field</span>
-                                        }</p>
-                                    <p><b>E-Mail     :</b><input type="email" onChange={this.changeData} name="email" required/>
-                                        {
-                                            error && <span className="red">*Please enter this Field</span>
-                                        }</p>
+                                    <p><b>DOB        :</b><input type="date" name="dob" max="1999-01-01" required/><span id="dAlert" className="red" style={{display:'none'}}>*Please enter the DOB</span>
+                                    </p>
+                                    <p><b>E-Mail     :</b><input type="email" name="email" required/><span id="eAlert" className="red" style={{display:'none'}}>*Please enter the Email ID</span>
+                                    </p>
                                     <p><b>Work-Field :</b></p>
                                         <input type="radio" value="Worker" name="wField" checked/>Worker
                                         <input type="radio" value="Engineer" name="wField"/>Engineer
@@ -180,7 +201,9 @@ class UsersDetails extends Component {
         )
     }
     homePage = () => {
-        const {employeeDetail} = this.state;
+        const {page} = this.state;
+        const empData = JSON.parse(localStorage.getItem('employeeDetail'));
+        console.log(empData);
         return (
             <div>
                 <div className="header">Employee Enrolment</div>
@@ -191,18 +214,36 @@ class UsersDetails extends Component {
                             <button onClick={this.createNew}>Create New</button>
                         </ul></div>
                     <div>
-                        {employeeDetail && employeeDetail.length>0 && employeeDetail.map((val, index) => {
-                            console.log(val);
-                            for(var i in val){
-                                console.log(val[i]);
-                                return(
-                                    <div>{val[i]}</div>
-                                )
-                            }
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Employee Id</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Gender</th>
+                                <th>E-mail</th>
+                                <th>DOB</th>
+                                <th>Post</th>
+                                <th></th>
+                            </tr>
+                        {empData && empData.length>0 && empData.map((val, index) => {
+                            let id = val['emp-id'];
+                            return(<tr key={val["emp-id"]}>
+                                <td><button type="button" onClick={()=>this.updateEmp(val['emp-id'])}>UPDATE</button></td>
+                                <td>{val["emp-id"]}</td>
+                                <td>{val.firstName}</td>
+                                <td>{val.lastName}</td>
+                                <td>{val.gender}</td>
+                                <td>{val.email}</td>
+                                <td>{val.dob}</td>
+                                <td>{val.post}</td>
+                                <td><button type="button" onClick={()=>this.deleteEmp(val['emp-id'])}>DELET</button></td>
+                            </tr>)
                         })}
+                    </table>
                     </div>
                 </div>
-                <div className="footer">©Surya Pratap Badal : badal2206@gmail.com</div>
+                <div className="footer">{localStorage.badal}©Surya Pratap Badal : badal2206@gmail.com</div>
             </div>
         )
     }
